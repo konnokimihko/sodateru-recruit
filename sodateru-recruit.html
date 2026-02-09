@@ -1,0 +1,632 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>採用情報 | 公益財団法人育てる会</title>
+    <style>
+        /* リセット＆基本設定 */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Noto Sans JP', 'Hiragino Kaku Gothic ProN', 'Hiragino Sans', Meiryo, sans-serif;
+            line-height: 1.8;
+            color: #333;
+            background-color: #f5f9f7;
+        }
+
+        /* ヘッダー（sticky） */
+        header {
+            position: sticky;
+            top: 0;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+            padding: 1rem 2rem;
+            transition: all 0.3s ease;
+        }
+
+        header .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        header h1 {
+            font-size: 1.5rem;
+            color: #2d7a5e;
+            font-weight: 700;
+        }
+
+        nav a {
+            margin-left: 2rem;
+            text-decoration: none;
+            color: #2d7a5e;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+
+        nav a:hover {
+            color: #4a9d7e;
+        }
+
+        /* メインビジュアル（パララックス効果） */
+        .hero {
+            position: relative;
+            height: 100vh;
+            min-height: 600px;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            text-align: center;
+        }
+
+        .hero-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 120%;
+            background: linear-gradient(135deg, #2d7a5e 0%, #4a9d7e 50%, #5eb89a 100%);
+            background-image:
+                linear-gradient(135deg, rgba(45, 122, 94, 0.9) 0%, rgba(74, 157, 126, 0.85) 100%),
+                url('https://images.unsplash.com/photo-1504280390367-361c6d9f38f4?w=1600');
+            background-size: cover;
+            background-position: center;
+            z-index: -1;
+            transform: translateY(0);
+            will-change: transform;
+        }
+
+        .hero-content {
+            z-index: 1;
+            padding: 2rem;
+            animation: fadeInUp 1s ease;
+        }
+
+        .hero h2 {
+            font-size: 3.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .hero p {
+            font-size: 1.5rem;
+            margin-bottom: 2rem;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+        }
+
+        .cta-button {
+            display: inline-block;
+            padding: 1rem 3rem;
+            background: white;
+            color: #2d7a5e;
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: 700;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .cta-button:hover {
+            transform: translateY(-3px) scale(1.05);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        /* セクション共通スタイル */
+        section {
+            padding: 5rem 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s ease;
+        }
+
+        section.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .section-title {
+            font-size: 2.5rem;
+            color: #2d7a5e;
+            text-align: center;
+            margin-bottom: 1rem;
+            font-weight: 700;
+        }
+
+        .section-subtitle {
+            text-align: center;
+            color: #666;
+            margin-bottom: 3rem;
+            font-size: 1.1rem;
+        }
+
+        /* 団体紹介セクション */
+        .about {
+            background: white;
+            border-radius: 20px;
+            padding: 4rem 3rem;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+        }
+
+        .about-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3rem;
+            align-items: center;
+        }
+
+        .about-image {
+            width: 100%;
+            height: 400px;
+            object-fit: cover;
+            border-radius: 15px;
+            transition: transform 0.3s ease;
+        }
+
+        .about-image:hover {
+            transform: scale(1.05);
+        }
+
+        .about-text h3 {
+            color: #2d7a5e;
+            font-size: 1.8rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .about-text p {
+            font-size: 1.1rem;
+            line-height: 2;
+            color: #555;
+        }
+
+        /* 職員インタビュー動画セクション */
+        .interview {
+            background: linear-gradient(135deg, #e8f5f1 0%, #d4ebe3 100%);
+            padding: 5rem 2rem;
+        }
+
+        .video-container {
+            max-width: 900px;
+            margin: 0 auto;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+            transition: transform 0.3s ease;
+        }
+
+        .video-container:hover {
+            transform: scale(1.02);
+        }
+
+        .video-wrapper {
+            position: relative;
+            padding-bottom: 56.25%;
+            height: 0;
+            overflow: hidden;
+        }
+
+        .video-wrapper iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+
+        .interview-text {
+            text-align: center;
+            margin-top: 2rem;
+            font-size: 1.1rem;
+            color: #555;
+        }
+
+        /* 給与・条件セクション */
+        .conditions {
+            background: white;
+            border-radius: 20px;
+            padding: 4rem 3rem;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+        }
+
+        .conditions-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .condition-card {
+            background: linear-gradient(135deg, #f0f9f6 0%, #e3f2ed 100%);
+            padding: 2rem;
+            border-radius: 15px;
+            border-left: 5px solid #4a9d7e;
+            transition: all 0.3s ease;
+        }
+
+        .condition-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(74, 157, 126, 0.2);
+        }
+
+        .condition-card h4 {
+            color: #2d7a5e;
+            font-size: 1.3rem;
+            margin-bottom: 1rem;
+            font-weight: 700;
+        }
+
+        .condition-card p {
+            color: #555;
+            line-height: 1.8;
+        }
+
+        .condition-card ul {
+            list-style: none;
+            margin-top: 1rem;
+        }
+
+        .condition-card li {
+            padding: 0.5rem 0;
+            color: #555;
+            position: relative;
+            padding-left: 1.5rem;
+        }
+
+        .condition-card li:before {
+            content: "✓";
+            position: absolute;
+            left: 0;
+            color: #4a9d7e;
+            font-weight: 700;
+        }
+
+        /* 外部リンクセクション */
+        .external-links {
+            background: linear-gradient(135deg, #2d7a5e 0%, #4a9d7e 100%);
+            color: white;
+            text-align: center;
+            padding: 5rem 2rem;
+        }
+
+        .external-links .section-title {
+            color: white;
+        }
+
+        .external-links .section-subtitle {
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        .links-container {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            flex-wrap: wrap;
+            margin-top: 2rem;
+        }
+
+        .link-card {
+            background: white;
+            color: #2d7a5e;
+            padding: 2rem 3rem;
+            border-radius: 15px;
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 1.2rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
+            min-width: 250px;
+        }
+
+        .link-card:hover {
+            transform: translateY(-5px) scale(1.05);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            background: #f0f9f6;
+        }
+
+        /* フッター */
+        footer {
+            background: #1a5040;
+            color: white;
+            text-align: center;
+            padding: 3rem 2rem;
+        }
+
+        footer p {
+            margin-bottom: 1rem;
+        }
+
+        footer a {
+            color: #5eb89a;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        footer a:hover {
+            color: #7dcfb0;
+        }
+
+        /* アニメーション */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* レスポンシブ対応 */
+        @media (max-width: 768px) {
+            header h1 {
+                font-size: 1.2rem;
+            }
+
+            nav {
+                display: none;
+            }
+
+            .hero h2 {
+                font-size: 2rem;
+            }
+
+            .hero p {
+                font-size: 1.1rem;
+            }
+
+            .about-content {
+                grid-template-columns: 1fr;
+            }
+
+            .section-title {
+                font-size: 2rem;
+            }
+
+            section {
+                padding: 3rem 1.5rem;
+            }
+
+            .conditions-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .links-container {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .link-card {
+                width: 100%;
+                max-width: 300px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .hero h2 {
+                font-size: 1.5rem;
+            }
+
+            .cta-button {
+                padding: 0.8rem 2rem;
+                font-size: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- ヘッダー -->
+    <header>
+        <div class="container">
+            <h1>公益財団法人育てる会 | 採用情報</h1>
+            <nav>
+                <a href="#about">団体について</a>
+                <a href="#interview">職員の声</a>
+                <a href="#conditions">募集要項</a>
+                <a href="#apply">応募する</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- メインビジュアル -->
+    <div class="hero">
+        <div class="hero-bg" id="heroBg"></div>
+        <div class="hero-content">
+            <h2>自然とともに、子どもとともに</h2>
+            <p>私たちと一緒に、子どもたちの未来を育てませんか？</p>
+            <a href="#about" class="cta-button">詳しく見る</a>
+        </div>
+    </div>
+
+    <!-- 団体紹介セクション -->
+    <section id="about" class="about">
+        <h2 class="section-title">育てる会について</h2>
+        <p class="section-subtitle">自然に学ぶ　暮らしに学ぶ</p>
+        <div class="about-content">
+            <img src="https://images.unsplash.com/photo-1516627145497-ae6968895b74?w=800" alt="自然体験活動" class="about-image">
+            <div class="about-text">
+                <h3>日本初の山村留学創設団体</h3>
+                <p>
+                    公益財団法人育てる会は、日本で初めて山村留学を創設した団体として、50年以上にわたり子どもたちの成長を支援してきました。
+                    長期山村留学や短期自然体験キャンプを通じて、自然の中での生活体験、農業体験、地域との交流など、豊かな体験活動を提供しています。
+                    私たちは「自然に学ぶ　暮らしに学ぶ」という理念のもと、子どもたちの心身の健やかな成長を支え、生きる力を育んでいます。
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- 職員インタビュー動画セクション -->
+    <section id="interview" class="interview">
+        <h2 class="section-title">職員インタビュー</h2>
+        <p class="section-subtitle">現場で働く職員の生の声をお届けします</p>
+        <div class="video-container">
+            <div class="video-wrapper">
+                <!-- YouTubeの埋め込みコードをここに挿入してください -->
+                <!-- 例: <iframe src="https://www.youtube.com/embed/VIDEO_ID" frameborder="0" allowfullscreen></iframe> -->
+                <iframe src="https://www.youtube.com/embed/dQw4w9WgXcQ" frameborder="0" allowfullscreen></iframe>
+            </div>
+        </div>
+        <p class="interview-text">
+            実際に働く職員が、仕事のやりがいや日々の活動について語ります。<br>
+            子どもたちと過ごす日常や、自然の中での体験活動の魅力をご覧ください。
+        </p>
+    </section>
+
+    <!-- 給与・条件セクション -->
+    <section id="conditions" class="conditions">
+        <h2 class="section-title">募集要項</h2>
+        <p class="section-subtitle">働きやすい環境と充実した待遇をご用意しています</p>
+        <div class="conditions-grid">
+            <div class="condition-card">
+                <h4>📋 募集職種</h4>
+                <p>
+                    <strong>教育指導員（正職員）</strong><br>
+                    自然体験活動の企画・運営、山村留学生の生活指導、キャンプ活動のリーダーなど
+                </p>
+            </div>
+            <div class="condition-card">
+                <h4>💰 給与</h4>
+                <p>
+                    <strong>月給 220,000円〜280,000円</strong><br>
+                    ※経験・能力により優遇<br>
+                    ※昇給年1回、賞与年2回
+                </p>
+            </div>
+            <div class="condition-card">
+                <h4>🕐 勤務時間</h4>
+                <p>
+                    <strong>8:00〜17:00（実働8時間）</strong><br>
+                    ※活動内容により変動あり<br>
+                    ※完全週休2日制（シフト制）
+                </p>
+            </div>
+            <div class="condition-card">
+                <h4>🎁 福利厚生</h4>
+                <ul>
+                    <li>社会保険完備</li>
+                    <li>交通費全額支給</li>
+                    <li>住宅手当あり</li>
+                    <li>研修制度充実</li>
+                    <li>資格取得支援</li>
+                </ul>
+            </div>
+            <div class="condition-card">
+                <h4>🎓 応募資格</h4>
+                <p>
+                    ・四年制大学卒業または同等の学歴<br>
+                    ・教員免許、保育士資格歓迎<br>
+                    ・普通自動車免許（必須）<br>
+                    ・野外活動経験者優遇
+                </p>
+            </div>
+            <div class="condition-card">
+                <h4>📍 勤務地</h4>
+                <p>
+                    <strong>長野県内の各施設</strong><br>
+                    ※長野県北部の自然豊かなエリア<br>
+                    ※寮・社宅あり（希望者）
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- 外部リンクセクション -->
+    <section id="apply" class="external-links">
+        <h2 class="section-title">応募はこちらから</h2>
+        <p class="section-subtitle">各求人サイトからご応募いただけます</p>
+        <div class="links-container">
+            <a href="https://www.mynavi.jp/" target="_blank" class="link-card">
+                マイナビで応募する
+            </a>
+            <a href="https://www.rikunabi.com/" target="_blank" class="link-card">
+                リクナビで応募する
+            </a>
+            <a href="https://www.sodateru.or.jp/" target="_blank" class="link-card">
+                公式サイトで詳細を見る
+            </a>
+        </div>
+    </section>
+
+    <!-- フッター -->
+    <footer>
+        <p>&copy; 2026 公益財団法人育てる会 All Rights Reserved.</p>
+        <p>
+            <a href="https://www.sodateru.or.jp/">公式サイト</a> |
+            <a href="https://twitter.com/">Twitter</a> |
+            <a href="https://facebook.com/">Facebook</a>
+        </p>
+    </footer>
+
+    <script>
+        // スクロール時のパララックス効果
+        window.addEventListener('scroll', () => {
+            const scrolled = window.pageYOffset;
+            const heroBg = document.getElementById('heroBg');
+            if (heroBg) {
+                heroBg.style.transform = `translateY(${scrolled * 0.5}px)`;
+            }
+        });
+
+        // スクロール時のフェードインアニメーション
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -100px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, observerOptions);
+
+        // すべてのセクションを監視
+        document.querySelectorAll('section').forEach(section => {
+            observer.observe(section);
+        });
+
+        // スムーススクロール（古いブラウザ対応）
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // ヘッダーのスクロール時の影の調整
+        window.addEventListener('scroll', () => {
+            const header = document.querySelector('header');
+            if (window.scrollY > 100) {
+                header.style.boxShadow = '0 4px 15px rgba(0, 0, 0, 0.15)';
+            } else {
+                header.style.boxShadow = '0 2px 10px rgba(0, 0, 0, 0.1)';
+            }
+        });
+    </script>
+</body>
+</html>
